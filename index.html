@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Levera Agency - Social Media Marketing for Hospitality</title>
+
+  <!-- Favicon (tab logo) -->
+  <link rel="icon" type="image/png" href="https://i.imgur.com/xc4I5Cj.png" />
+  <link rel="apple-touch-icon" href="https://i.imgur.com/xc4I5Cj.png" />
+  <link rel="shortcut icon" href="https://i.imgur.com/xc4I5Cj.png" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            turquoise: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              300: '#5eead4',
+              400: '#2dd4bf',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          boxShadow: {
+            glow: '0 0 0 3px rgba(20, 184, 166, 0.25), 0 12px 30px rgba(0,0,0,0.12)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+    html { scroll-behavior: smooth; }
+    body { 
+      font-family: 'Inter', system-ui, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Logo intro animation */
+    .logo-img { opacity: 0; transform: scale(0.6) rotate(-10deg); }
+    .logo-reveal { animation: logoPop .9s cubic-bezier(.2,.8,.2,1) forwards; }
+    @keyframes logoPop {
+      0% { opacity: 0; transform: scale(0.6) rotate(-10deg); filter: blur(6px); }
+      60% { opacity: 1; transform: scale(1.08) rotate(2deg); filter: blur(0); }
+      100% { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    /* Hero background animation */
+    .hero-gradient {
+      position: relative;
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(20,184,166,0.08), transparent 60%),
+                  radial-gradient(1200px 600px at 80% 20%, rgba(13,148,136,0.08), transparent 60%),
+                  linear-gradient(135deg, #f8fafc 0%, #ecfeff 100%);
+      overflow: hidden;
+    }
+    .hero-gradient:before {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      background: conic-gradient(from 0deg, rgba(20,184,166,.08), rgba(13,148,136,.08), transparent, rgba(20,184,166,.08));
+      animation: spinSlow 18s linear infinite;
+      filter: blur(60px);
+      z-index: 0;
+    }
+    @keyframes spinSlow {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Reusable animation helpers */
+    .animate-in { opacity: 0; transform: translateY(24px) scale(.98); }
+    .reveal-up { animation: revealUp .9s cubic-bezier(.2,.6,.2,1) forwards; }
+    .reveal-left { animation: revealLeft 1s cubic-bezier(.2,.6,.2,1) forwards; }
+    .reveal-right { animation: revealRight 1s cubic-bezier(.2,.6,.2,1) forwards; }
+    .pop { animation: pop .7s ease-out forwards; }
+    .floaty { animation: floaty 6s ease-in-out infinite; }
+    .pulse-soft { animation: pulseSoft 3s ease-in-out infinite; }
+    .shimmer { position: relative; overflow: hidden; }
+    .shimmer:after {
+      content:"";
+      position:absolute; inset:0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,.3) 30%, transparent 60%);
+      transform: translateX(-120%);
+      animation: shimmer 3.2s ease-in-out infinite;
+    }
+    @keyframes revealUp { to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes revealLeft { from {opacity:0; transform: translateX(-40px)} to {opacity:1; transform: translateX(0);} }
+    @keyframes revealRight { from {opacity:0; transform: translateX(40px)} to {opacity:1; transform: translateX(0);} }
+    @keyframes pop { 0%{opacity:0; transform: scale(.8)} 60%{opacity:1; transform: scale(1.04)} 100%{transform: scale(1)} }
+    @keyframes floaty { 0%,100%{ transform: translateY(0)} 50%{ transform: translateY(-8px)} }
+    @keyframes pulseSoft { 0%,100%{ transform: scale(1)} 50%{ transform: scale(1.03)} }
+    @keyframes shimmer { 0%{ transform: translateX(-120%)} 100%{ transform: translateX(120%)} }
+
+    /* Cards hover lift + tilt */
+    .card { transition: transform .25s ease, box-shadow .25s ease; }
+    .card:hover { transform: translateY(-6px); box-shadow: 0 16px 38px rgba(0,0,0,.12); }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);
+      transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 36px rgba(20,184,166,.35);
+      filter: brightness(1.03);
+    }
+    .btn-ghost:hover { transform: translateY(-2px); }
+
+    /* Mobile menu transitions */
+    .mobile-panel {
+      transition: transform .25s ease, opacity .25s ease;
+      transform: translateY(-10px);
+      opacity: 0;
+    }
+    .mobile-panel.open {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    .overlay {
+      background: rgba(2,6,23,.48);
+      backdrop-filter: blur(2px);
+      opacity: 0;
+      transition: opacity .2s ease;
+      pointer-events: none;
+    }
+    .overlay.show { opacity: 1; pointer-events: auto; }
+
+    /* Safe spacing inside containers */
+    .section-padding { padding: 4rem 0; }
+    @media (max-width: 768px) { .section-padding { padding: 2.5rem 0; } }
+
+    /* Dark mode overrides to swap whites and blacks */
+    .dark body { background-color: #0b0f19; color: #f8fafc; }
+    .dark .bg-white, .dark .bg-gray-50, .dark .bg-white\/90 { background-color: #0b0f19 !important; }
+    .dark .text-slate-900, .dark .text-gray-900, .dark .text-black { color: #f8fafc !important; }
+    .dark .text-gray-700, .dark .text-slate-700, .dark .text-gray-600, .dark .text-slate-600 { color: #e5e7eb !important; }
+    .dark .border-gray-100, .dark .border-gray-200 { border-color: #1f2937 !important; }
+    .dark .bg-gray-50\/ { background-color: #0b0f19 !important; }
+    .dark nav { background-color: rgba(2,6,23,0.85) !important; }
+    .dark .hero-gradient { background: linear-gradient(135deg, #0b0f19 0%, #0b1220 100%); }
+  </style>
+</head>
+<body class="bg-gray-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100">
+  <!-- Navigation -->
+  <nav class="bg-white/90 dark:bg-slate-900/80 backdrop-blur-md border-b border-gray-100 dark:border-slate-800 fixed w-full top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <a href="#" class="flex items-center gap-3 group">
+          <img src="https://i.imgur.com/xc4I5Cj.png" alt="Levera Agency Logo" class="logo-img w-10 h-10 rounded-2xl object-contain bg-white dark:bg-slate-800 p-1 shadow-glow" />
+          <div>
+            <p class="text-2xl font-extrabold leading-none group-hover:text-turquoise-700 transition-colors">Levera Agency</p>
+            <p class="text-[11px] text-gray-500 leading-none mt-1">Est. 2025 • 500+ Campaigns • 98% Success</p>
+          </div>
+        </a>
+
+        <div class="hidden lg:flex items-center space-x-8">
+          <a href="#services" class="text-gray-700 hover:text-turquoise-600 text-base font-semibold transition-colors">Services</a>
+          <a href="#process" class="text-gray-700 hover:text-turquoise-600 text-base font-semibold transition-colors">Process</a>
+          <a href="#industries" class="text-gray-700 hover:text-turquoise-600 text-base font-semibold transition-colors">Industries</a>
+          
+          <a href="#faq" class="text-gray-700 hover:text-turquoise-600 text-base font-semibold transition-colors">FAQ</a>
+          <button id="themeToggle" class="relative flex items-center gap-2 px-3 py-2 rounded-xl text-gray-700 hover:text-turquoise-700 hover:bg-gray-100 transition-colors" aria-label="Toggle theme">
+            <svg id="icon-moon" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+            <svg id="icon-sun" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a6 6 0 100-12 6 6 0 000 12zm0 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm0-22a1 1 0 011-1 1 1 0 011 1v1a1 1 0 11-2 0V0zM4.22 5.64a1 1 0 011.42 0L7 7a1 1 0 11-1.41 1.41L4.22 7.05a1 1 0 010-1.41zM17 7l1.36-1.36a1 1 0 111.41 1.41L18.41 8.4A1 1 0 1117 7zm-13 5H3a1 1 0 110-2h1a1 1 0 110 2zm18 0h1a1 1 0 110 2h-1a1 1 0 110-2zM6 17l-1.36 1.36a1 1 0 101.41 1.41L7.4 18.41A1 1 0 106 17zm11 0a1 1 0 10-1.41 1.41l1.36 1.36a1 1 0 001.41-1.41L17 17z"/></svg>
+            <span class="text-sm font-semibold">Theme</span>
+          </button>
+          <a href="https://calendly.com/levera-info/30min" target="_blank" class="btn-primary shimmer text-white px-6 py-3 rounded-full text-base font-bold shadow-glow">Book Consultation</a>
+        </div>
+
+        <!-- Mobile button -->
+        <button id="hamburger" aria-label="Open menu" class="lg:hidden p-2 rounded-xl hover:bg-gray-100 transition-colors">
+          <!-- Hamburger -->
+          <svg id="icon-open" class="w-7 h-7 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="false">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+          <!-- Close -->
+          <svg id="icon-close" class="w-7 h-7 text-gray-700 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Mobile menu panel -->
+      <div id="mobile-wrapper" class="relative lg:hidden">
+        <div id="overlay" class="overlay fixed inset-0 z-40"></div>
+        <div id="mobile-menu" class="mobile-panel absolute left-0 right-0 bg-white border-b border-gray-100 rounded-b-2xl p-4 shadow-xl z-50">
+          <div class="grid gap-2">
+            <a href="#services" class="block px-3 py-3 rounded-lg text-gray-800 hover:bg-turquoise-50 hover:text-turquoise-700 font-semibold" data-close>Services</a>
+            <a href="#process" class="block px-3 py-3 rounded-lg text-gray-800 hover:bg-turquoise-50 hover:text-turquoise-700 font-semibold" data-close>Process</a>
+            <a href="#industries" class="block px-3 py-3 rounded-lg text-gray-800 hover:bg-turquoise-50 hover:text-turquoise-700 font-semibold" data-close>Industries</a>
+            
+            <a href="#faq" class="block px-3 py-3 rounded-lg text-gray-800 hover:bg-turquoise-50 hover:text-turquoise-700 font-semibold" data-close>FAQ</a>
+            <button id="themeToggleMobile" class="mt-2 w-full flex items-center justify-center gap-2 px-3 py-3 rounded-xl text-gray-800 hover:bg-gray-100 font-semibold" aria-label="Toggle theme">
+              <svg id="icon-moon-m" class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+              <svg id="icon-sun-m" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="currentColor"><path d="M12 18a6 6 0 100-12 6 6 0 000 12z"/></svg>
+              Theme
+            </button>
+            <a href="https://calendly.com/levera-info/30min" target="_blank" class="btn-primary text-center text-white px-4 py-3 rounded-xl font-bold mt-2" data-close>Book Consultation</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero-gradient pt-24 pb-16">
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
+      <div class="text-center max-w-5xl mx-auto relative z-10">
+        <div class="mb-6 animate-in" data-animate="reveal-up" style="animation-delay:.05s">
+          <span class="bg-turquoise-100 text-turquoise-800 px-5 py-2 rounded-full text-sm font-bold inline-block">🚀 Trusted by 200+ Hospitality Businesses Worldwide</span>
+        </div>
+        <h1 class="animate-in text-5xl sm:text-6xl lg:text-8xl font-black text-slate-900 leading-tight mb-6" data-animate="reveal-up" style="animation-delay:.12s">
+          We’re not a marketing agency.
+          <span class="text-gradient block">We’re so much more.</span>
+        </h1>
+        <p class="animate-in text-xl sm:text-2xl text-gray-600 leading-relaxed font-medium mb-10 max-w-5xl mx-auto" data-animate="reveal-up" style="animation-delay:.2s">
+          We specialise in professionally crafted, algorithm-optimised reels every month for restaurants, cafés, hotels, bars, event venues and spas, driving engagement, bookings and brand lift with strategy, production and constant optimisation.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10 max-w-3xl mx-auto">
+          <div class="bg-white/90 backdrop-blur-sm p-6 rounded-2xl border border-gray-200 animate-in card" data-animate="pop" style="animation-delay:.15s">
+            <div class="text-4xl font-black text-turquoise-600 mb-2">500%</div>
+            <div class="text-base font-semibold text-gray-700">Avg. Engagement Increase</div>
+          </div>
+          <div class="bg-white/90 backdrop-blur-sm p-6 rounded-2xl border border-gray-200 animate-in card" data-animate="pop" style="animation-delay:.25s">
+            <div class="text-4xl font-black text-turquoise-600 mb-2">2.5M+</div>
+            <div class="text-base font-semibold text-gray-700">Total Views Generated</div>
+          </div>
+          <div class="bg-white/90 backdrop-blur-sm p-6 rounded-2xl border border-gray-200 animate-in card" data-animate="pop" style="animation-delay:.35s">
+            <div class="text-4xl font-black text-turquoise-600 mb-2">98%</div>
+            <div class="text-base font-semibold text-gray-700">Client Satisfaction Rate</div>
+          </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-5 justify-center items-center mb-12">
+          <a href="https://calendly.com/levera-info/30min" target="_blank" class="btn-primary shimmer text-white px-10 py-5 rounded-full text-lg font-black shadow-glow animate-in" data-animate="reveal-left" style="animation-delay:.28s">
+            🎯 Start Growing Today - Free 30-Min Strategy Call
+          </a>
+          <a href="#services" class="btn-ghost text-gray-800 hover:text-turquoise-700 px-8 py-5 rounded-full text-lg font-bold inline-flex items-center gap-2 transition-all animate-in" data-animate="reveal-right" style="animation-delay:.32s">
+            📊 View Complete Service Breakdown
+            <svg class="w-6 h-6 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </a>
+        </div>
+
+        <div class="text-sm text-gray-500 max-w-3xl mx-auto animate-in" data-animate="reveal-up" style="animation-delay:.38s">
+          ⭐ Featured in: Hospitality Marketing Weekly, Social Media Today, Restaurant Business Magazine | 🏆 Best Social Media Agency 2024 | 📈 Avg ROI: 340% within 6 months
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Value Proposition -->
+  <section class="section-padding bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="animate-in text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 mb-3" data-animate="reveal-up">
+          <span class="text-gradient">Nail your influencer investment</span>
+        </h2>
+        <p class="animate-in text-xl text-slate-700" data-animate="reveal-up" style="animation-delay:.08s">with the right partner.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="card animate-in p-8 rounded-3xl bg-gray-50 dark:bg-slate-800/60 border border-gray-100 dark:border-slate-700 text-center" data-animate="reveal-up" style="animation-delay:.05s">
+          <div class="w-20 h-20 feature-icon rounded-3xl flex items-center justify-center mb-6 mx-auto floaty text-white">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold mb-3">No brief is too big</h3>
+          <p class="text-slate-600">We scale from seasonal campaigns to annual commitments with Fortune 500 brands.</p>
+        </div>
+
+        <div class="card animate-in p-8 rounded-3xl bg-gray-50 dark:bg-slate-800/60 border border-gray-100 dark:border-slate-700 text-center" data-animate="reveal-up" style="animation-delay:.12s">
+          <div class="w-20 h-20 feature-icon rounded-3xl flex items-center justify-center mb-6 mx-auto floaty text-white">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold mb-3">You aim, we hit the target</h3>
+          <p class="text-slate-600">Brand lift? Engagement? Sales? Your campaign depends on the right creators. That’s where we come in.</p>
+        </div>
+
+        <div class="card animate-in p-8 rounded-3xl bg-gray-50 dark:bg-slate-800/60 border border-gray-100 dark:border-slate-700 text-center" data-animate="reveal-up" style="animation-delay:.2s">
+          <div class="w-20 h-20 feature-icon rounded-3xl flex items-center justify-center mb-6 mx-auto floaty text-white">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold mb-3">Get insights as they happen</h3>
+          <p class="text-slate-600">Track sales and purchases alongside campaign spend, from organic to paid, at every step.</p>
+        </div>
+      </div>
+
+      <!-- Extra marketing style section (requested text) -->
+      <div class="mt-16 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="card p-6 rounded-3xl bg-gray-50 dark:bg-slate-800/60 border border-gray-100 dark:border-slate-700 animate-in" data-animate="reveal-up">
+          <h3 class="text-2xl font-extrabold mb-3">Influencer marketing</h3>
+          <p class="text-slate-600">Adding a face to the business. We manage that around your budget.</p>
+        </div>
+        <div class="card p-6 rounded-3xl bg-gray-50 dark:bg-slate-800/60 border border-gray-100 dark:border-slate-700 animate-in" data-animate="reveal-up" style="animation-delay:.06s">
+          <h3 class="text-2xl font-extrabold mb-3">Choose your marketing style</h3>
+          <p class="text-slate-600">Pick the look, tone and pacing that fits your brand.</p>
+        </div>
+        <div class="card p-6 rounded-3xl bg-gray-50 border border-gray-100 animate-in" data-animate="reveal-up" style="animation-delay:.12s">
+          <h3 class="text-2xl font-extrabold mb-3">Or we’ll create it for you</h3>
+          <p class="text-slate-600">Prefer a done-for-you approach? We’ll design your marketing style end-to-end.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section-padding bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14">
+        <h2 class="animate-in text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 mb-6" data-animate="reveal-up">
+          Complete Social Media Solutions for <span class="text-gradient">Your Hospitality Business</span>
+        </h2>
+        <p class="animate-in text-xl text-gray-600 max-w-4xl mx-auto" data-animate="reveal-up" style="animation-delay:.08s">
+          Creative excellence plus data-driven strategy to turn views into customers, grow brand awareness and drive direct bookings.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="card animate-in p-10 rounded-3xl bg-white border border-gray-100" data-animate="reveal-up" style="animation-delay:.05s">
+          <div class="w-20 h-20 feature-icon rounded-3xl flex items-center justify-center mb-8 text-white floaty">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold mb-4">Professional Reel Creation</h3>
+          <p class="text-slate-600 mb-4">Premium capture, editing, motion graphics, colour and sound for irresistible, high-retention content.</p>
+          <ul class="text-sm text-slate-600 space-y-1">
+            <li>• Storyboarding and shot lists</li>
+            <li>• 4K capture and stabilisation</li>
+            <li>• Motion graphics and overlays</li>
+            <li>• Multiple aspect ratios</li>
+          </ul>
+        </div>
+
+        <div class="card animate-in p-10 rounded-3xl bg-white border border-gray-100" data-animate="reveal-up" style="animation-delay:.12s">
+          <div class="w-20 h-20 feature-icon rounded-3xl flex items-center justify-center mb-8 text-white floaty">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold mb-4">Smart Planning & Calendar</h3>
+          <p class="text-slate-600 mb-4">Seasonal themes, ideal timing, trend mapping and competitive positioning for consistent wins.</p>
+          <ul class="text-sm text-slate-600 space-y-1">
+            <li>• Audience and competitor insights</li>
+            <li>• Holiday and event integration</li>
+            <li>• Cross-platform adaptation</li>
+            <li>• Crisis playbooks</li>
+          </ul>
+        </div>
+
+        <div class="card animate-in p-10 rounded-3xl bg-white border border-gray-100" data-animate="reveal-up" style="animation-delay:.2s">
+          <div class="w-20 h-20 feature-icon rounded-3xl flex items-center justify-center mb-8 text-white floaty">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          </svg>
+          </div>
+          <h3 class="text-2xl font-extrabold mb-4">Analytics & Optimisation</h3>
+          <p class="text-slate-600 mb-4">Real-time reading, testing and iteration to push engagement, reach and ROI higher each month.</p>
+          <ul class="text-sm text-slate-600 space-y-1">
+            <li>• Live performance snapshots</li>
+            <li>• A/B creative testing</li>
+            <li>• Hashtag refinement</li>
+            <li>• Clear monthly reporting</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process" class="section-padding bg-gray-50 dark:bg-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-14">
+        <h2 class="animate-in text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 mb-6" data-animate="reveal-up">
+          Our <span class="text-gradient">8-Step Process</span> for Maximum Results
+        </h2>
+        <p class="animate-in text-xl text-gray-600 max-w-4xl mx-auto" data-animate="reveal-up" style="animation-delay:.08s">
+          Strategy, creativity, production and constant optimisation—built for hospitality.
+        </p>
+      </div>
+
+      <div class="space-y-12">
+        <!-- Step 1 -->
+        <div class="flex flex-col lg:flex-row items-start gap-8">
+          <div class="w-20 h-20 feature-icon text-white rounded-full flex items-center justify-center font-black text-2xl pulse-soft shadow-glow animate-in" data-animate="reveal-left">1</div>
+          <div class="flex-1 animate-in" data-animate="reveal-right">
+            <h3 class="text-3xl font-black mb-4">Discovery & Brand Analysis</h3>
+            <p class="text-slate-600 mb-4">Deep dive on brand, audience, competitors and goals to set a winning direction.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div class="p-6 rounded-2xl bg-white border border-gray-100 card">Brand audit, KPIs, voice, visual identity</div>
+              <div class="p-6 rounded-2xl bg-white border border-gray-100 card">Market, trends, perception, opportunities</div>
+            </div>
+          </div>
+        </div>
+        <!-- Step 2 -->
+        <div class="flex flex-col lg:flex-row items-start gap-8">
+          <div class="w-20 h-20 feature-icon text-white rounded-full flex items-center justify-center font-black text-2xl pulse-soft shadow-glow animate-in" data-animate="reveal-left">2</div>
+          <div class="flex-1 animate-in" data-animate="reveal-right">
+            <h3 class="text-3xl font-black mb-4">Strategy & Calendar</h3>
+            <p class="text-slate-600 mb-4">Themes, timing, formats and cross-platform plans that match your goals.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="p-5 rounded-2xl bg-white border border-gray-100 card">Pillars, story arcs</div>
+              <div class="p-5 rounded-2xl bg-white border border-gray-100 card">Seasonal & local hooks</div>
+              <div class="p-5 rounded-2xl bg-white border border-gray-100 card">Forecasts & pacing</div>
+            </div>
+          </div>
+        </div>
+        <!-- Steps 3-8 (concise for brevity, still animated) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 animate-in card" data-animate="reveal-up">
+            <div class="flex items-center gap-4 mb-2">
+              <div class="w-12 h-12 feature-icon text-white rounded-2xl flex items-center justify-center font-black">3</div>
+              <h4 class="text-xl font-bold">Pre-Production & Creative</h4>
+            </div>
+            <p class="text-slate-600">Boards, shot lists, mood, look and feel aligned to brand.</p>
+          </div>
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 animate-in card" data-animate="reveal-up" style="animation-delay:.05s">
+            <div class="flex items-center gap-4 mb-2">
+              <div class="w-12 h-12 feature-icon text-white rounded-2xl flex items-center justify-center font-black">4</div>
+              <h4 class="text-xl font-bold">Production & Capture</h4>
+            </div>
+            <p class="text-slate-600">Cinematic shots, lighting and styling to showcase experience.</p>
+          </div>
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 animate-in card" data-animate="reveal-up" style="animation-delay:.1s">
+            <div class="flex items-center gap-4 mb-2">
+              <div class="w-12 h-12 feature-icon text-white rounded-2xl flex items-center justify-center font-bold">5</div>
+              <h4 class="text-xl font-bold">Post-Production</h4>
+            </div>
+            <p class="text-slate-600">Edit, motion, colour and sound for scroll-stopping impact.</p>
+          </div>
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 animate-in card" data-animate="reveal-up" style="animation-delay:.15s">
+            <div class="flex items-center gap-4 mb-2">
+              <div class="w-12 h-12 feature-icon text-white rounded-2xl flex items-center justify-center font-bold">6</div>
+              <h4 class="text-xl font-bold">Audio & Trends</h4>
+            </div>
+            <p class="text-slate-600">Trending sounds that match mood, platform and audience.</p>
+          </div>
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 animate-in card" data-animate="reveal-up" style="animation-delay:.2s">
+            <div class="flex items-center gap-4 mb-2">
+              <div class="w-12 h-12 feature-icon text-white rounded-2xl flex items-center justify-center font-bold">7</div>
+              <h4 class="text-xl font-bold">Publishing & Reach</h4>
+            </div>
+            <p class="text-slate-600">Best timing, captions and hashtags for maximum discovery.</p>
+          </div>
+          <div class="p-6 rounded-3xl bg-white border border-gray-100 animate-in card" data-animate="reveal-up" style="animation-delay:.25s">
+            <div class="flex items-center gap-4 mb-2">
+              <div class="w-12 h-12 feature-icon text-white rounded-2xl flex items-center justify-center font-bold">8</div>
+              <h4 class="text-xl font-bold">Performance & Iteration</h4>
+            </div>
+            <p class="text-slate-600">Clear readouts, learnings and upgrades every month.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Industries -->
+  <section id="industries" class="section-padding bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="animate-in text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 mb-6" data-animate="reveal-up">
+          Hospitality Sectors We <span class="text-gradient">Specialise In</span>
+        </h2>
+        <p class="animate-in text-xl text-gray-600 max-w-4xl mx-auto" data-animate="reveal-up" style="animation-delay:.08s">
+          Industry-specific content that resonates with your exact audience.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- Sample industry cards (kept concise but animated) -->
+        <div class="card p-8 rounded-3xl bg-white border border-gray-100 animate-in" data-animate="reveal-up">
+          <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v13m0-13V6a2 2 0 112 2h-2zM5 12h14M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Restaurants & Cafés</h3>
+          <p class="text-slate-600">Food reveals, chef moments, ambience and seasonal launches.</p>
+        </div>
+
+        <div class="card p-8 rounded-3xl bg-white border border-gray-100 animate-in" data-animate="reveal-up" style="animation-delay:.05s">
+          <div class="w-12 h-12 bg-blue-100 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Hotels & Accommodations</h3>
+          <p class="text-slate-600">Room tours, amenities, experiences and local partnerships.</p>
+        </div>
+
+        <div class="card p-8 rounded-3xl bg-white border border-gray-100 animate-in" data-animate="reveal-up" style="animation-delay:.1s">
+          <div class="w-12 h-12 bg-purple-100 rounded-2xl flex items-center justify-center mb-6">
+            <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13"/></svg>
+          </div>
+          <h3 class="text-xl font-bold mb-3">Bars, Pubs & Nightlife</h3>
+          <p class="text-slate-600">Signature drinks, live moments and energy-packed highlights.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- FAQ -->
+  <section id="faq" class="section-padding bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h2 class="animate-in text-4xl sm:text-5xl font-black text-slate-900 mb-6" data-animate="reveal-up">
+          Frequently Asked <span class="text-gradient">Questions</span>
+        </h2>
+        <p class="animate-in text-xl text-gray-600 max-w-4xl mx-auto" data-animate="reveal-up" style="animation-delay:.08s">
+          Everything you need to know about how we work and what you’ll get.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="card p-6 rounded-3xl bg-gray-50 dark:bg-slate-800/60 border border-gray-100 dark:border-slate-700 animate-in" data-animate="reveal-up">
+          <h3 class="text-lg font-extrabold text-slate-900 mb-2">When will I see results?</h3>
+          <p class="text-slate-600">Early lifts appear in 2–4 weeks. Bigger business impact typically shows by weeks 6–8 with consistent posting.</p>
+        </div>
+        <div class="card p-6 rounded-3xl bg-gray-50 border border-gray-100 animate-in" data-animate="reveal-up" style="animation-delay:.05s">
+          <h3 class="text-lg font-extrabold text-slate-900 mb-2">How are you different?</h3>
+          <p class="text-slate-600">We’re built for hospitality—strategy, creative and execution tailored to this industry only.</p>
+        </div>
+        <div class="card p-6 rounded-3xl bg-gray-50 border border-gray-100 animate-in" data-animate="reveal-up" style="animation-delay:.1s">
+          <h3 class="text-lg font-extrabold text-slate-900 mb-2">Do I need to provide ideas?</h3>
+          <p class="text-slate-600">We handle end-to-end creation and planning, and love your input when you have it.</p>
+        </div>
+        <div class="card p-6 rounded-3xl bg-gray-50 border border-gray-100 animate-in" data-animate="reveal-up" style="animation-delay:.15s">
+          <h3 class="text-lg font-extrabold text-slate-900 mb-2">How do you measure ROI?</h3>
+          <p class="text-slate-600">Clear reporting on engagement, reach, inquiries and conversions—plus learnings to keep improving.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-50 dark:bg-slate-950 border-t border-gray-200 dark:border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+        <p class="text-sm text-slate-500">© <span id="year"></span> Levera Agency. All rights reserved.</p>
+        <a href="https://calendly.com/levera-info/30min" target="_blank" class="btn-primary text-white px-6 py-3 rounded-full font-bold shadow-glow">Book a Free Strategy Call</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Helper: get elements
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+
+    // Theme toggle with persistence
+    const rootEl = document.documentElement; // <html>
+    const themeToggle = document.getElementById('themeToggle');
+    const themeToggleMobile = document.getElementById('themeToggleMobile');
+    const iconMoon = document.getElementById('icon-moon');
+    const iconSun = document.getElementById('icon-sun');
+    const iconMoonM = document.getElementById('icon-moon-m');
+    const iconSunM = document.getElementById('icon-sun-m');
+
+    function applyThemeIcons() {
+      const dark = rootEl.classList.contains('dark');
+      if (iconMoon && iconSun) {
+        iconMoon.classList.toggle('hidden', dark);
+        iconSun.classList.toggle('hidden', !dark);
+      }
+      if (iconMoonM && iconSunM) {
+        iconMoonM.classList.toggle('hidden', dark);
+        iconSunM.classList.toggle('hidden', !dark);
+      }
+    }
+
+    function setTheme(dark) {
+      rootEl.classList.toggle('dark', dark);
+      localStorage.setItem('theme', dark ? 'dark' : 'light');
+      applyThemeIcons();
+    }
+
+    function initTheme() {
+      const saved = localStorage.getItem('theme');
+      if (saved) {
+        setTheme(saved === 'dark');
+      } else {
+        // System preference fallback
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        setTheme(prefersDark);
+      }
+    }
+
+    function toggleTheme() {
+      setTheme(!rootEl.classList.contains('dark'));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initTheme();
+      // Logo reveal on load
+      const logo = document.querySelector('.logo-img');
+      if (logo) {
+        // small delay so it feels intentional
+        setTimeout(() => logo.classList.add('logo-reveal'), 150);
+      }
+      themeToggle && themeToggle.addEventListener('click', toggleTheme);
+      themeToggleMobile && themeToggleMobile.addEventListener('click', toggleTheme);
+    });
+
+    // Mobile menu controls
+    const hamburger = $('#hamburger');
+    const iconOpen = $('#icon-open');
+    const iconClose = $('#icon-close');
+    const mobileMenu = $('#mobile-menu');
+    const overlay = $('#overlay');
+
+    let menuOpen = false;
+
+    function openMenu() {
+      mobileMenu.classList.add('open');
+      overlay.classList.add('show');
+      iconOpen.classList.add('hidden');
+      iconClose.classList.remove('hidden');
+      hamburger.setAttribute('aria-label', 'Close menu');
+      document.body.style.overflow = 'hidden';
+      menuOpen = true;
+    }
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      overlay.classList.remove('show');
+      iconOpen.classList.remove('hidden');
+      iconClose.classList.add('hidden');
+      hamburger.setAttribute('aria-label', 'Open menu');
+      document.body.style.overflow = '';
+      menuOpen = false;
+    }
+    function toggleMenu() { menuOpen ? closeMenu() : openMenu(); }
+
+    hamburger.addEventListener('click', toggleMenu);
+    overlay.addEventListener('click', closeMenu);
+    window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && menuOpen) closeMenu(); });
+    $$('[data-close]').forEach(el => el.addEventListener('click', closeMenu));
+
+    // Scroll-in animations (observer) - ensure elements stay visible after anim
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const type = el.dataset.animate || 'reveal-up';
+          const delay = el.style.animationDelay || (Math.random() * 0.25).toFixed(2) + 's';
+          el.classList.add(type);
+          el.style.animationDelay = delay;
+
+          // After animation finishes, remove the initial hidden state so it stays
+          const onEnd = () => {
+            el.classList.remove('animate-in');
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+            el.removeEventListener('animationend', onEnd);
+          };
+          el.addEventListener('animationend', onEnd);
+
+          io.unobserve(el);
+        }
+      });
+    }, { threshold: 0.18 });
+
+    $$('.animate-in').forEach(el => io.observe(el));
+
+    // Subtle hero parallax
+    const hero = document.querySelector('.hero-gradient');
+    const heroTitle = hero ? hero.querySelector('h1') : null;
+    const heroCtas = hero ? hero.querySelectorAll('a') : [];
+    if (hero && heroTitle) {
+      hero.addEventListener('mousemove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        heroTitle.style.transform = `translate3d(${x * 10}px, ${y * 10}px, 0)`;
+        heroCtas.forEach((c, i) => c.style.transform = `translate3d(${x * (6 + i*2)}px, ${y * (6 + i*2)}px, 0)`);
+      });
+      hero.addEventListener('mouseleave', () => {
+        heroTitle.style.transform = '';
+        heroCtas.forEach((c) => (c.style.transform = ''));
+      });
+    }
+
+    // Tilt effect on cards
+    $$('.card').forEach(card => {
+      let rect;
+      card.addEventListener('mouseenter', () => { rect = card.getBoundingClientRect(); });
+      card.addEventListener('mousemove', (e) => {
+        if (!rect) rect = card.getBoundingClientRect();
+        const x = (e.clientX - rect.left) / rect.width - 0.5;
+        const y = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = `rotateX(${(-y*4).toFixed(2)}deg) rotateY(${(x*6).toFixed(2)}deg) translateY(-4px)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = '';
+      });
+    });
+
+    // Year in footer
+    $('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
